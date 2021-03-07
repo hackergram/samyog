@@ -7,6 +7,23 @@
 	"item": [
 		{
 			"name": "HELLO",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"pm.test(\"API Hello Successful\", function () {",
+							"    ",
+							"    pm.expect(pm.response.json().status).to.eql(\"success\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -17,6 +34,73 @@
 					],
 					"path": [
 						"hello"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "NodeLookup",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"pm.test(\"Call Successful\", function () {",
+							"    ",
+							"    pm.expect(pm.response.json().status).to.eql(\"success\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{APIROOT}}/nodes?id=in_suhelbidani",
+					"host": [
+						"{{APIROOT}}"
+					],
+					"path": [
+						"nodes"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "in_suhelbidani"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Node",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"_key\": \"in_suhelbidani\",\n    \"company\": \"Bill & Melinda Gates Foundation\",\n    \"desonly\": \"Supporting the vision of 'All lives have equal value'\",\n    \"name\": \"Suhel Bidani\",\n    \"url\": \"https://www.linkedin.com/in/suhelbidani/\",\n    \"category\": \"liprofile\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{APIROOT}}/nodes/",
+					"host": [
+						"{{APIROOT}}"
+					],
+					"path": [
+						"nodes",
+						""
 					]
 				}
 			},
