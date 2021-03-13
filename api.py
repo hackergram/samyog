@@ -5,7 +5,7 @@ import json
 from flask_restful import reqparse, abort, Api, Resource
 from flask_cors import CORS
 confjson = {}
-with open("~/api.json", "rb") as f:
+with open("/home/arjun/api.json", "rb") as f:
     confjson = json.loads(f.read())
 
 
@@ -49,8 +49,13 @@ class Collections(Resource):
                 } for x in graph.vertex_collections()],
                 "status": "success"
             })
-
-
+    def post(self, collection_name=None):
+        if collection_name is not None:
+            try:
+                graph.create_vertex_collection(collection_name)
+                return jsonify({
+                    
+                })
 
 
 api.add_resource(Collections, '/collections/<collection_name>', '/collections', '/collections/')

@@ -1,68 +1,59 @@
+
+
+
+<!doctype html>
+<html lang="en">
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="http://twitter.github.com/typeahead.js/releases/latest/typeahead.bundle.js"></script>
-<script src="http://twitter.github.com/typeahead.js/releases/latest/typeahead.jquery.js"></script>
-<script src="http://twitter.github.com/typeahead.js/releases/latest/bloodhound.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Autocomplete - Remote JSONP datasource</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <style>
+  .ui-autocomplete-loading {
+    background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
+  }
+  </style>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    function log( message ) {
+      $( "<div>" ).text( message ).prependTo( "#log" );
+      $( "#log" ).scrollTop( 0 );
+    }
 
+    $( "#birds" ).autocomplete({
+      source: function( request, response ) {
+        $.ajax( {
+          url: "http://192.168.56.101:5010/collections",
+          dataType: "json",
+          success: function( data ) {
+            console.log(data)
+            response( data.resp.map(a=>a.collection_name) );
+          }
+        } );
+      },
+      minLength: 2,
+      select: function( event, ui ) {
+        log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+      }
+    } );
+  } );
+  </script>
 </head>
+<body>
 
+<div class="ui-widget">
+  <label for="birds">Birds: </label>
+  <input id="birds">
+</div>
 
-
-<div id="prefetch">
-  <input class="typeahead" type="text" placeholder="Countries">
+<div class="ui-widget" style="margin-top:2em; font-family:Arial">
+  Result:
+  <div id="log" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
 </div>
 
 
-<script>
-
-  var countries = new Bloodhound({
-    datumTokenizer: Bloodhound.tokenizers.whitespace,
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    remote: {
-      url: "http://192.168.56.101:5010/collections",
-      filter: function(response) {
-        return response.resp;
-      }
-    }
-  });
-
-  // initialize the bloodhound suggestion engine
-  countries.initialize();
-
-  function autocompleteDevices(q, sync, async) {
-    console.log(q,countries)
-      if (q === '') {
-          async(countries.all());
-      } else {
-          countries.search(q, async);
-      }
-  }
-
-  // instantiate the typeahead UI
-  $('.typeahead').typeahead(
-    { hint: true,
-      highlight: true,
-      minLength: 1
-    },
-    {
-    name: 'countries',
-    displayKey: function(countries) {
-      console.log(countries)
-      return countries.collection_name;
-    },
-    source: autocompleteDevices,
-    templates: {
-      notFound: '<div>Not Found</div>',   /* Rendered if 0 suggestions are available */
-      pending: '<div>Loading...</div>',   /* Rendered if 0 synchronous suggestions available
-                                           but asynchronous suggestions are expected */
-      suggestion:  function(data) {       /* Used to render a single suggestion */
-                    return '<div>'+ data.collection_name +'</div>'
-                 },
-
-    }
-  });
-
-
-
-
-</script>
+</body>
+</html>
