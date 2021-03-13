@@ -1,0 +1,6 @@
+{
+  "dbname": "<YOURDBNAME>",
+  "username": "root",
+  "password": "<YOURDBPASS>",
+  "graphname": "<YOURGRAPHNAME>"
+}
